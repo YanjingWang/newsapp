@@ -7,13 +7,16 @@
 // slice function is used to slice the array
 
 //downlaod react-router-dom: npm install react-router-dom
+//npm i react-infinite-scroll-component
+//https://codesandbox.io/s/yk7637p62z
+
 
 //commnt article part after use of api
 import React, { Component } from 'react'
 import NewsItems from './NewsItems'
 import Loading from './Loading'
 import PropTypes from 'prop-types'; // ES6 https://www.npmjs.com/package/prop-types
-
+import InfiniteScroll from "react-infinite-scroll-component";
 export class news extends Component {
 
     // articles = [
@@ -290,16 +293,17 @@ export class news extends Component {
         category: PropTypes.string
     }
 
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             // articles: this.articles
             articles: [],
-            page: 1
+            page: 1,
             // title: "my title",
             // description: "my description",
             // imageUrl: "https://media.cnn.com/api/v1/images/stellar/prod/211019133948-judge-tanya-chutkan.jpg?c=16x9&q=w_800,c_fill",
             // newsUrl: "https://www.cnn.com/2021/10/19/politics/judge-tanya-chutkan-justice-department/index.html",
+            totalResults: 0
         }
         console.log("Hello I am a constructor from newsitems class-based component");
     }
@@ -321,36 +325,44 @@ export class news extends Component {
         // console.log(parsedData);
         // this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults })
     } //componentDidMount is a lifecycle method, it is called after the render method
-
-    PrevPg = async () => {
-        this.setState({ page: this.state.page - 1 })
-        this.updateNews();
-        // console.log("Previous");
-        // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page - 1}&pageSize=9`;
-        // this.setState({ loading: true })
-        // let data = await fetch(url);
-        // let parsedData = await data.json();
-        // console.log(parsedData);
-        // this.setState({ page: this.state.page - 1, articles: parsedData.articles, loading: false })
-
-    }
-    nextPg = async () => {
+    fetchMoreData = async () => {
         this.setState({ page: this.state.page + 1 })
-        this.updateNews();
-        // if (this.state.page + 1 <= Math.ceil(this.state.totalResults / 9)) {
-        //     console.log("Next");
-        //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page + 1}&pageSize=9`;
-        //     this.setState({ loading: true })
-        //     let data = await fetch(url);
-        //     let parsedData = await data.json();
-        //     console.log(parsedData);
-        //     this.setState({ page: this.state.page + 1, articles: parsedData.articles, loading: false })
-        // }
-        // else {
-
-        // }
-
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        this.setState({ loading: true })
+        let data = await fetch(url);
+        let parsedData = await data.json();
+        console.log(parsedData);
+        this.setState({ articles: this.state.articles.concat(parsedData.articles), totalResults: parsedData.totalResults, loading: false })
     }
+    // PrevPg = async () => {
+    //     this.setState({ page: this.state.page - 1 })
+    //     this.updateNews();
+    //     // console.log("Previous");
+    //     // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page - 1}&pageSize=9`;
+    //     // this.setState({ loading: true })
+    //     // let data = await fetch(url);
+    //     // let parsedData = await data.json();
+    //     // console.log(parsedData);
+    //     // this.setState({ page: this.state.page - 1, articles: parsedData.articles, loading: false })
+
+    // }
+    // nextPg = async () => {
+    //     this.setState({ page: this.state.page + 1 })
+    //     this.updateNews();
+    //     // if (this.state.page + 1 <= Math.ceil(this.state.totalResults / 9)) {
+    //     //     console.log("Next");
+    //     //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page + 1}&pageSize=9`;
+    //     //     this.setState({ loading: true })
+    //     //     let data = await fetch(url);
+    //     //     let parsedData = await data.json();
+    //     //     console.log(parsedData);
+    //     //     this.setState({ page: this.state.page + 1, articles: parsedData.articles, loading: false })
+    //     // }
+    //     // else {
+
+    //     // }
+
+    // }
     render() {
         console.log("second");
         return (
@@ -358,14 +370,25 @@ export class news extends Component {
                 <div className='container my-3'>
                     <h2>Headines</h2>
                     {this.state.loading && <Loading />}
-                    <div className="row">
-                        {!this.state.loading && this.state.articles.map((element) => {
-                            return <div className="col-md-4" key={element.url}>
-                                <NewsItems title={element.title ? element.title.slice(0, 100) : ""} description={element.description ? element.description.slice(0, 100) : ""} imageUrl={element.urlToImage} newsUrl={element.url} />
-                            </div>
+                    <InfiniteScroll
+                        dataLength={this.state.articles.length}
+                        next={this.fetchMoreData}
+                        hasMore={this.state.articles.length !== this.state.totalResults}
+                        loader={<h4>Loading...</h4>}
+                    >
+                        <div className="container">
+                            <div className="row">
+                                {/* {!this.state.loading && this.state.articles.map((element) => { */}
+                                {this.state.articles.map((element) => {
+                                    return <div className="col-md-4" key={element.url}>
+                                        <NewsItems title={element.title ? element.title.slice(0, 100) : ""} description={element.description ? element.description.slice(0, 100) : ""} imageUrl={element.urlToImage} newsUrl={element.url} />
+                                    </div>
 
-                        })}
-                        {/* <div className="col-md-4">
+                                })}
+                            </div>
+                        </div>
+                    </InfiniteScroll>
+                    {/* <div className="col-md-4">
                             <NewsItems title="myTitle" description="myDescription" imageUrl="https://media.cnn.com/api/v1/images/stellar/prod/211019133948-judge-tanya-chutkan.jpg?c=16x9&q=w_800,c_fill" />
                         </div>
                         <div className="col-md-4">
@@ -374,15 +397,15 @@ export class news extends Component {
                         <div className="col-md-4">
                             <NewsItems title="myTitle" description="myDescription" />
                         </div> */}
-                    </div>
+                    {/* </div> */}
                     {/* <NewsItems title="myTitle" description="myDescription" /> */}
-                    <div className="container d-flex justify-content-between">
+                    {/* <div className="container d-flex justify-content-between">
                         <button type="button" disabled={this.state.page <= 1} onClick={this.PrevPg} className="btn btn-dark my-3">&larr;Previous</button>
                         <button type="button" disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / 9)} onClick={this.nextPg} className="btn btn-dark my-3">Next Page &rarr;</button>
-                    </div>
+                    </div> */}
 
                 </div>
-            </div>
+            </div >
         )
     }
 }
