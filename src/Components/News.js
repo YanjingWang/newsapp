@@ -303,14 +303,14 @@ export class news extends Component {
         }
         console.log("Hello I am a constructor from newsitems class-based component");
     }
-    async updateNews() {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        this.setState({ loading: true })
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        console.log(parsedData);
-        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, loading: false })
-    }
+    // async updateNews() {
+    //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    //     this.setState({ loading: true })
+    //     let data = await fetch(url);
+    //     let parsedData = await data.json();
+    //     console.log(parsedData);
+    //     this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, loading: false })
+    // }
 
     async componentDidMount() {
         console.log("first");
