@@ -303,47 +303,52 @@ export class news extends Component {
         }
         console.log("Hello I am a constructor from newsitems class-based component");
     }
-    // async updateNews() {
-    //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    //     this.setState({ loading: true })
-    //     let data = await fetch(url);
-    //     let parsedData = await data.json();
-    //     console.log(parsedData);
-    //     this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, loading: false })
-    // }
-
-    async componentDidMount() {
-        console.log("first");
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba`;
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        console.log(parsedData);
-        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults })
-    } //componentDidMount is a lifecycle method, it is called after the render method
-
-    PrevPg = async () => {
-        console.log("Previous");
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page - 1}&pageSize=9`;
+    async updateNews() {
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({ loading: true })
         let data = await fetch(url);
         let parsedData = await data.json();
         console.log(parsedData);
-        this.setState({ page: this.state.page - 1, articles: parsedData.articles, loading: false })
+        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, loading: false })
+    }
+
+    async componentDidMount() {
+        this.updateNews();
+        // console.log("first");
+        // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba`;
+        // let data = await fetch(url);
+        // let parsedData = await data.json();
+        // console.log(parsedData);
+        // this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults })
+    } //componentDidMount is a lifecycle method, it is called after the render method
+
+    PrevPg = async () => {
+        this.setState({ page: this.state.page - 1 })
+        this.updateNews();
+        // console.log("Previous");
+        // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page - 1}&pageSize=9`;
+        // this.setState({ loading: true })
+        // let data = await fetch(url);
+        // let parsedData = await data.json();
+        // console.log(parsedData);
+        // this.setState({ page: this.state.page - 1, articles: parsedData.articles, loading: false })
 
     }
     nextPg = async () => {
-        if (this.state.page + 1 <= Math.ceil(this.state.totalResults / 9)) {
-            console.log("Next");
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page + 1}&pageSize=9`;
-            this.setState({ loading: true })
-            let data = await fetch(url);
-            let parsedData = await data.json();
-            console.log(parsedData);
-            this.setState({ page: this.state.page + 1, articles: parsedData.articles, loading: false })
-        }
-        else {
+        this.setState({ page: this.state.page + 1 })
+        this.updateNews();
+        // if (this.state.page + 1 <= Math.ceil(this.state.totalResults / 9)) {
+        //     console.log("Next");
+        //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=868c2e50168b4e3da891de01e3657fba&page=${this.state.page + 1}&pageSize=9`;
+        //     this.setState({ loading: true })
+        //     let data = await fetch(url);
+        //     let parsedData = await data.json();
+        //     console.log(parsedData);
+        //     this.setState({ page: this.state.page + 1, articles: parsedData.articles, loading: false })
+        // }
+        // else {
 
-        }
+        // }
 
     }
     render() {
