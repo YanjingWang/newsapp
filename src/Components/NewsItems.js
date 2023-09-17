@@ -3,10 +3,12 @@
 //{{ width: '18rem' }} put two curly braces around it to make it jxs
 //copy urltoimage from json file and paste it in the img src
 //cut articles and constructor from newsitems.js and paste it in News.js
-import React, { Component } from 'react'
+// import React, { Component } from 'react'
+import React from 'react'
 
 
-export class NewsItems extends Component {
+// export class NewsItems extends Component {
+const NewsItems = (props) => {
     // articles = [
     //     {
     //         "source": {
@@ -280,21 +282,23 @@ export class NewsItems extends Component {
     //     }
     //     console.log("Hello I am a constructor from newsitems class-based component");
     // }
-    render() {
-        let { title, description, imageUrl, newsUrl, author, date, source } = this.props;
-        return (
-            <div><div className="card" > {/* style={{ width: '18rem' }} */}
-                <img src={imageUrl} className="card-img-top" alt="..." />
-                {/* replace https://media.cnn.com/api/v1/images/stellar/prod/211019133948-judge-tanya-chutkan.jpg?c=16x9&q=w_800,c_fill with {imageUrl} */}
-                <div className="card-body">
-                    <h5 className="card-title">{title}</h5>
-                    <p className="card-text">{description}</p>
-                    <a href={newsUrl} target='_blank' className="btn btn-primary">Read More</a>
-                    {/* replace # with {newsUrl} */}
-                </div>
-            </div></div>
-        )
-    }
+
+    // render() {
+    // let { title, description, imageUrl, newsUrl, author, date, source } = this.props;
+    let { title, description, imageUrl, newsUrl, author, date, source } = props;
+    return (
+        <div><div className="card" > {/* style={{ width: '18rem' }} */}
+            <img src={imageUrl} className="card-img-top" alt="..." />
+            {/* replace https://media.cnn.com/api/v1/images/stellar/prod/211019133948-judge-tanya-chutkan.jpg?c=16x9&q=w_800,c_fill with {imageUrl} */}
+            <div className="card-body">
+                <h5 className="card-title">{title}</h5>
+                <p className="card-text">{description}</p>
+                <a href={newsUrl} target='_blank' className="btn btn-primary">Read More</a>
+                {/* replace # with {newsUrl} */}
+            </div>
+        </div></div>
+    )
 }
+// }
 
 export default NewsItems

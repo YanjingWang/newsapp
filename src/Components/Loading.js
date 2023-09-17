@@ -1,17 +1,18 @@
 // rcc tab
-import React, { Component } from 'react'
+// import React, { Component } from 'react'
+import React from 'react'
 import loading from '../loading.gif';
-
-export default class Loading extends Component {
-    render() {
-        return (
-            <div className='text-center'>
-                <img src={loading} alt="loading spinner" />
-            </div>
-        )
-    }
+const Loading = () => {
+    // export default class Loading extends Component {
+    // render() {
+    return (
+        <div className='text-center'>
+            <img src={loading} alt="loading spinner" />
+        </div>
+    )
 }
-
+// }
+export default Loading
 //how to debug? ERROR in ./src/Components/Loading.js 6:0-42 Module not found: Error: Can't resolve '...srcloading.gif' in 'C:\Users\Ywang36\OneDrive - NYCDOE\Desktop\web dev bootcamp\newsapp\src\Components'
 //1. check the path
 //2. check the file name
